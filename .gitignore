@@ -8,3 +8,10 @@
 # sbt specific
 .history
 target/
+
+#logs
+stats-data/
+index-*.html
+
+#MacOS
+.DS_Store
