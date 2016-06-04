@@ -1,11 +1,15 @@
 package app
 
+import java.io.{BufferedWriter, File, FileWriter}
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDate, LocalDateTime}
+
 import actors._
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.pattern._
 import com.typesafe.scalalogging.slf4j.Logger
 import org.slf4j.LoggerFactory
-import utl.FileUtl
+import utl.{CSVWriter, FileUtl}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -22,6 +26,8 @@ object TestApp extends App {
     def printStatistics(stat: Statistics) = {
       logger.info(s"-------- cnt: ${stat.cnt}---------")
       stat.results.foreach(r => logger.info(s"avgTime = ${r.avgTime} ms; count = ${r.count}; countParseError = ${r.countParseError}"))
+
+      CSVWriter.printStatisticsToFile(stat)
     }
 
     def drawGraph(stat: Statistics) = {
