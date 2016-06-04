@@ -23,11 +23,9 @@ object TestApp extends App {
     val system = ActorSystem("TestingSystem")
     val resultReceiver = system.actorOf(AggregationActor.props)
 
-    def printStatistics(stat: Statistics) = {
+    def logStatistics(stat: Statistics) = {
       logger.info(s"-------- cnt: ${stat.cnt}---------")
       stat.results.foreach(r => logger.info(s"avgTime = ${r.avgTime} ms; count = ${r.count}; countParseError = ${r.countParseError}"))
-
-      CSVWriter.printStatisticsToFile(stat)
     }
 
     def drawGraph(stat: Statistics) = {
@@ -63,7 +61,7 @@ object TestApp extends App {
 
         case Success(stat) =>
 
-          printStatistics(stat)
+          logStatistics(stat)
 
           val continue = optLast match {
             case Some(lastStat) => lastStat.results.length != stat.results.length
@@ -74,6 +72,7 @@ object TestApp extends App {
             runWithCheck(Some(stat))
           else {
             drawGraph(stat)
+            CSVWriter.printStatisticsToFile(stat)
             system.terminate()
             logger.info("Stop.")
           }

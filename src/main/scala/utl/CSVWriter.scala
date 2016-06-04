@@ -29,8 +29,8 @@ object CSVWriter {
         new FileOutputStream(file), encoding))
 
     try {
-      stat.results.foreach(
-        r => writer.append(s"${r.avgTime}$separator${r.count}$separator${r.countParseError}$endLine"))
+      stat.rawDataList.foreach(
+        r => writer.append(s"${r.epochMilli}$separator${r.epochSecond}$separator${r.duration}$separator${r.parseCheckToInt}$endLine"))
     } finally {
       writer.flush()
       writer.close()
